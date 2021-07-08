@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 module.exports = {
   mode: 'development',
@@ -16,5 +17,14 @@ module.exports = {
       { test: /\.css?$/, loader: 'css-loader' },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: './public/index.html' })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: './public/index.html' }),
+    new ModuleFederationPlugin({
+      name: 'AppShell',
+      filename: 'remoteEntry.js',
+      remotes: {
+        COLCE: 'COLCE@http://localhost:3001/remoteEntry.js',
+      },
+    }),
+  ],
 };
